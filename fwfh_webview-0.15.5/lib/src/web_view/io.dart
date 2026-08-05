@@ -23,6 +23,7 @@ class WebViewState extends State<WebView> {
   late final lib.WebViewController _controller;
 
   late double _aspectRatio;
+  bool _changed = false;
   String? _firstFinishedUrl;
   _Issue37? _issue37;
   _ResizeObserver? _resizeObserver;
@@ -145,9 +146,11 @@ class WebViewState extends State<WebView> {
     final w = size.width;
     final h = size.height;
     final r = (h > 0 && w > 0) ? (w / h) : _aspectRatio;
-    final changed = (r - _aspectRatio).abs() > 0.1;
-    if (changed) {
-      setState(() => _aspectRatio = r);
+    if (!_changed) {
+      _changed = true;
+      if (r != _aspectRatio) {
+        setState(() => _aspectRatio = r);
+      }
     }
   }
 
