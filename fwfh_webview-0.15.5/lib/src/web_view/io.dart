@@ -145,7 +145,7 @@ class WebViewState extends State<WebView> {
     final w = size.width;
     final h = size.height;
     final r = (h > 0 && w > 0) ? (w / h) : _aspectRatio;
-    final changed = (r - _aspectRatio).abs() > 0.0001;
+    final changed = (r - _aspectRatio).abs() > 0.1;
     if (changed) {
       setState(() => _aspectRatio = r);
     }
@@ -191,7 +191,7 @@ class WebViewState extends State<WebView> {
   void _onPageFinished(String url) {
     unawaited(_ignoreError(_resizeObserver?.observe('document.body')));
     Future.delayed(Duration(seconds: 3)).then((_) {
-      _firstFinishedUrl = url;
+      _firstFinishedUrl ??= url;
     });
   }
 }
