@@ -168,8 +168,8 @@ class WebViewState extends State<WebView> {
     if (callback != null &&
         _firstFinishedUrl != null &&
         req.isMainFrame &&
-        req.url != widget.url &&
-        req.url != _firstFinishedUrl) {
+        !_isSameUrl(req.url, widget.url) &&
+        !_isSameUrl(req.url, _firstFinishedUrl!)) {
       intercepted = callback(req.url);
     }
 
@@ -177,6 +177,16 @@ class WebViewState extends State<WebView> {
         ? lib.NavigationDecision.prevent
         : lib.NavigationDecision.navigate;
   }
+
+  String _urlKey(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.host.isEmpty) {
+      return url;
+    }
+    return '${uri.host}${uri.path}';
+  }
+
+  bool _isSameUrl(String a, String b) => _urlKey(a) == _urlKey(b);
 
   void _onAndroidHideCustomWidgetDefault() {
     Navigator.of(context).pop();
