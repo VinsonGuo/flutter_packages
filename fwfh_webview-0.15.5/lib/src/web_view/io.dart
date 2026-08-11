@@ -8,6 +8,7 @@ import 'package:webview_flutter/webview_flutter.dart' as lib;
 import 'package:webview_flutter_android/webview_flutter_android.dart' as lib;
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart'
     as lib;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'web_view.dart';
 
@@ -67,9 +68,7 @@ class WebViewState extends State<WebView> {
     await _controller.setNavigationDelegate(
       lib.NavigationDelegate(
         onPageFinished: _onPageFinished,
-        onNavigationRequest: widget.interceptNavigationRequest != null
-            ? (req) => _interceptNavigationRequest(req)
-            : null,
+        onNavigationRequest: (req) => _interceptNavigationRequest(req),
       ),
     );
     await _controller.setUserAgent(widget.userAgent);
@@ -103,7 +102,7 @@ class WebViewState extends State<WebView> {
         uri,
         headers: {
           'Referrer-Policy': 'strict-origin-when-cross-origin',
-          'Referer': 'https://com.vinsonguo.smart_rss_reader',
+          'Referer': 'https://vinsonguo.github.io',
         },
       );
     }
@@ -163,14 +162,18 @@ class WebViewState extends State<WebView> {
   lib.NavigationDecision _interceptNavigationRequest(
     lib.NavigationRequest req,
   ) {
+    print('interceptNavigationRequest: ${req.url}');
     var intercepted = false;
-    final callback = widget.interceptNavigationRequest;
-    if (callback != null &&
-        _firstFinishedUrl != null &&
-        req.isMainFrame &&
-        !_isSameUrl(req.url, widget.url) &&
-        !_isSameUrl(req.url, _firstFinishedUrl!)) {
-      intercepted = callback(req.url);
+    final uri = Uri.tryParse(req.url);
+    if (req.isMainFrame
+      && _firstFinishedUrl != null 
+      && req.url != _firstFinishedUrl
+      && req.url != widget.url
+      && uri != null
+      && uri.host.endsWith('youtube.com')
+    ) {
+      launchUrl(Uri.parse(req.url), mode: LaunchMode.externalApplication);
+      intercepted = true;
     }
 
     return intercepted
@@ -178,15 +181,6 @@ class WebViewState extends State<WebView> {
         : lib.NavigationDecision.navigate;
   }
 
-  String _urlKey(String url) {
-    final uri = Uri.tryParse(url);
-    if (uri == null || uri.host.isEmpty) {
-      return url;
-    }
-    return '${uri.host}${uri.path}';
-  }
-
-  bool _isSameUrl(String a, String b) => _urlKey(a) == _urlKey(b);
 
   void _onAndroidHideCustomWidgetDefault() {
     Navigator.of(context).pop();
@@ -203,9 +197,7 @@ class WebViewState extends State<WebView> {
 
   void _onPageFinished(String url) {
     unawaited(_ignoreError(_resizeObserver?.observe('document.body')));
-    Future.delayed(Duration(seconds: 3)).then((_) {
-      _firstFinishedUrl ??= url;
-    });
+    _firstFinishedUrl ??= url;
   }
 }
 

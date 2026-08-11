@@ -40,14 +40,6 @@ class WebView extends StatefulWidget {
   /// {@endtemplate}
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
 
-  /// The callback to handle navigation request.
-  ///
-  /// This will be triggered on generated navigation within the web view.
-  /// Returning `true` will stop web view from navigating.
-  ///
-  /// Flutter Web is not supported.
-  final bool Function(String value)? interceptNavigationRequest;
-
   /// {@template web_view.js}
   /// Controls whether to enable JavaScript.
   ///
@@ -105,7 +97,6 @@ class WebView extends StatefulWidget {
     bool? autoResize,
     this.debuggingEnabled = false,
     this.gestureRecognizers = const <Factory<OneSequenceGestureRecognizer>>{},
-    this.interceptNavigationRequest,
     this.js = true,
     this.mediaPlaybackAlwaysAllow = false,
     this.onAndroidHideCustomWidget,

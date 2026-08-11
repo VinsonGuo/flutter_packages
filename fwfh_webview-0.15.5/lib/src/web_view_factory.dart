@@ -69,14 +69,6 @@ mixin WebViewFactory on WidgetFactory {
       autoResize: !dimensOk && js,
       debuggingEnabled: webViewDebuggingEnabled,
       gestureRecognizers: webViewGestureRecognizers,
-      interceptNavigationRequest: (newUrl) {
-        if (newUrl == url) {
-          return false;
-        }
-
-        gestureTapCallback(newUrl)?.call();
-        return true;
-      },
       js: js,
       mediaPlaybackAlwaysAllow: webViewMediaPlaybackAlwaysAllow,
       onAndroidHideCustomWidget: webViewOnAndroidHideCustomWidget,
