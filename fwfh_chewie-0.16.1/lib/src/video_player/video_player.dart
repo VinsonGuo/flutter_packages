@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:chewie/chewie.dart' as lib;
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:gallery_saver_plus/gallery_saver.dart';
+import 'package:gal/gal.dart';
 import 'package:video_player/video_player.dart' as lib;
 
 import 'adaptive_controls.dart';
@@ -180,26 +180,56 @@ class _VideoPlayerState extends State<VideoPlayer> {
           duration: Duration(minutes: 1),
         ),
       );
-      final result = await GallerySaver.saveVideo(widget.url,);
+      final file = await _downloadVideo();
+      await Gal.putVideo(file.path);
       if (!mounted) {
         return;
       }
-      if (result == true) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Video saved successfully', style: TextStyle(color: Colors.white)),
-            backgroundColor: Colors.green),);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Please grant necessary permissions.', style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.red,));
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Video saved successfully', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.green),);
+    } on GalException catch (e) {
+      if (!mounted) {
+        return;
       }
+      ScaffoldMessenger.of(context).clearSnackBars();
+      final message = e.type == GalExceptionType.accessDenied
+          ? 'Please grant necessary permissions.'
+          : 'Video save failed: ${e.type.message}';
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message, style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.red));
     } catch (e) {
+        if (!mounted) {
+          return;
+        }
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Video save failed: $e', style: TextStyle(color: Colors.white)),
             backgroundColor: Colors.red));
     }
 
+  }
+
+  Future<File> _downloadVideo() async {
+    final uri = Uri.parse(widget.url);
+    var fileName = uri.pathSegments.isEmpty ? 'video' : uri.pathSegments.last;
+    if (!fileName.contains('.')) {
+      fileName = '$fileName.mp4';
+    }
+    final file = File('${Directory.systemTemp.path}/$fileName');
+    final client = HttpClient();
+    try {
+      final request = await client.getUrl(uri);
+      final response = await request.close();
+      if (response.statusCode != HttpStatus.ok) {
+        throw Exception('HTTP ${response.statusCode}');
+      }
+      await response.pipe(file.openWrite());
+    } finally {
+      client.close();
+    }
+    return file;
   }
 }
