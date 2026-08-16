@@ -23,15 +23,6 @@ class TagVideo {
   BuildOp get buildOp => BuildOp(
         debugLabel: kTagVideo,
         onRenderBlock: (tree, placeholder) {
-          if (defaultTargetPlatform != TargetPlatform.android &&
-              defaultTargetPlatform != TargetPlatform.iOS &&
-              defaultTargetPlatform != TargetPlatform.macOS &&
-              !kIsWeb) {
-            // these are the player's supported platforms
-            // https://pub.dev/packages/video_player/versions/2.8.1
-            return placeholder;
-          }
-
           final attrs = tree.element.attributes;
           final url = wf.urlFull(attrs[kAttributeVideoSrc] ?? '');
           if (url != null) {
