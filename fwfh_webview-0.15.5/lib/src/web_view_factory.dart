@@ -121,7 +121,7 @@ mixin WebViewFactory on WidgetFactory {
                 // Android & iOS are the webview_flutter's supported platforms
                 // Flutter web support is implemented by this package
                 // https://pub.dev/packages/webview_flutter/versions/2.0.12
-                return widgets;
+                return buildWebViewLinkOnly(meta, url) ?? widgets;
               }
 
               final a = meta.element.attributes;
