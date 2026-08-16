@@ -114,16 +114,6 @@ mixin WebViewFactory on WidgetFactory {
               };
             },
             onWidgets: (meta, widgets) {
-              if (defaultTargetPlatform != TargetPlatform.android &&
-                  defaultTargetPlatform != TargetPlatform.iOS &&
-                  defaultTargetPlatform != TargetPlatform.macOS &&
-                  !kIsWeb) {
-                // Android & iOS are the webview_flutter's supported platforms
-                // Flutter web support is implemented by this package
-                // https://pub.dev/packages/webview_flutter/versions/2.0.12
-                return buildWebViewLinkOnly(meta, url) ?? widgets;
-              }
-
               final a = meta.element.attributes;
               final dataSrc = a[kAttributeIframeDataSrc];
               final srcAttr = a[kAttributeIframeSrc];
@@ -132,6 +122,16 @@ mixin WebViewFactory on WidgetFactory {
               );
               if (src == null) {
                 return widgets;
+              }
+              
+              if (defaultTargetPlatform != TargetPlatform.android &&
+                  defaultTargetPlatform != TargetPlatform.iOS &&
+                  defaultTargetPlatform != TargetPlatform.macOS &&
+                  !kIsWeb) {
+                // Android & iOS are the webview_flutter's supported platforms
+                // Flutter web support is implemented by this package
+                // https://pub.dev/packages/webview_flutter/versions/2.0.12
+                return listOrNull(buildWebViewLinkOnly(meta, src)) ?? widgets;
               }
 
               final height = tryParseDoubleFromMap(a, kAttributeIframeHeight);
