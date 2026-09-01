@@ -1,0 +1,21 @@
+name: flutter_expandable_fab
+description: The speed dial FAB (Floating Action Button) that can animate the display and hiding of multiple action buttons.
+version: 2.5.2
+homepage: https://github.com/zuvola/flutter_expandable_fab
+
+environment:
+  sdk: ">=2.17.1 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  material_ui: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:

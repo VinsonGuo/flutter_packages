@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:chewie/chewie.dart' as lib;
-import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:gal/gal.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:video_player/video_player.dart' as lib;
 
 import 'adaptive_controls.dart';

@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Dart / Flutter build artifacts
+.dart_tool/
+.build/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# Pub (library packages do not commit the lockfile)
+pubspec.lock
+
+# IDE / editor
+.idea/
+*.iml
+.vscode/
+
+# Test / coverage
+coverage/

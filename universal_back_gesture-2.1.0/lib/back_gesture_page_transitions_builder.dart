@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:universal_back_gesture/back_gesture_config.dart';
 
 class BackGesturePageTransitionsBuilder extends PageTransitionsBuilder {

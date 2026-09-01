@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart' as lib;
 import 'package:webview_flutter_android/webview_flutter_android.dart' as lib;
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart'
     as lib;
-import 'package:url_launcher/url_launcher.dart';
 
 import 'web_view.dart';
 

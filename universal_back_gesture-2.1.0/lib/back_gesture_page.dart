@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:universal_back_gesture/universal_back_gesture.dart';
 
 /// Shared back-gesture transition for the app's Cupertino pages: Cupertino

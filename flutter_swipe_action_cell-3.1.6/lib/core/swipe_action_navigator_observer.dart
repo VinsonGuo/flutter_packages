@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 
 /// This class is used to close opening cell when navigator change its routes.
