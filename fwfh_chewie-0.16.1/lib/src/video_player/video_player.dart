@@ -98,7 +98,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
     Widget? child;
     final controller = _controller;
     if (controller != null) {
-      child = lib.Chewie(controller: controller);
+      child = MaterialUiCompatibilityBridge(child: lib.Chewie(controller: controller));
     } else if (_error != null) {
       final errorBuilder = widget.errorBuilder;
       if (errorBuilder != null) {
