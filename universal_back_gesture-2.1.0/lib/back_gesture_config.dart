@@ -32,6 +32,14 @@ class BackGestureConfig {
   /// Can be specified in pixels or as a percentage of the screen width.
   final GestureMeasurement swipeDetectionArea;
 
+  /// Defines the width of the area where a trackpad pan/zoom gesture (e.g. a two-finger
+  /// swipe) can be initiated.
+  ///
+  /// Trackpad gestures report the position of the cursor rather than the position of
+  /// the fingers, so requiring an edge here would mean moving the cursor to that edge
+  /// first. Defaults to the whole screen.
+  final GestureMeasurement panZoomSwipeDetectionArea;
+
   /// Defines the swipe distance (horizontally) required for the page transition animation
   /// to go from its start (fully visible) to its end (fully hidden).
   /// This controls the sensitivity of the drag.
@@ -62,6 +70,8 @@ class BackGestureConfig {
   ///
   /// [swipeDetectionArea] defines the width of the area on the screen edge
   /// where the back gesture can be initiated.
+  /// [panZoomSwipeDetectionArea] defines the width of the area where a trackpad
+  /// pan/zoom gesture can be initiated.
   /// [swipeTransitionRange] defines the swipe distance required to trigger
   /// a full pop of the current route.
   /// [swipeVelocityThreshold] defines the minimum swipe velocity required to
@@ -74,6 +84,7 @@ class BackGestureConfig {
   /// [cancelAnimationDuration] is the duration of the cancel animation.
   const BackGestureConfig({
     this.swipeDetectionArea = const GestureMeasurement.percentage(1),
+    this.panZoomSwipeDetectionArea = const GestureMeasurement.percentage(1),
     this.swipeTransitionRange = const GestureMeasurement.pixels(150),
     this.swipeVelocityThreshold = 1100,
     this.animationProgressCompleteThreshold = 0.5,

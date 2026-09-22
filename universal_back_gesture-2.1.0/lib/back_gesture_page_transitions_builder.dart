@@ -114,6 +114,26 @@ class __BackGestureWrapperState extends State<_BackGestureWrapper> {
     }
   }
 
+  void _handlePointerPanZoomStart(PointerPanZoomStartEvent event) {
+    if (!widget.route.popGestureEnabled || _isGestureStarted) return;
+
+    final double edgeWidth = widget.config.panZoomSwipeDetectionArea.resolve(context);
+    final bool isRtl = Directionality.of(context) == TextDirection.rtl;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
+    // Trackpad gestures report the position of the cursor, not of the fingers.
+    bool isInSwipeArea;
+    if (isRtl) {
+      isInSwipeArea = event.localPosition.dx >= (screenWidth - edgeWidth);
+    } else {
+      isInSwipeArea = event.localPosition.dx <= edgeWidth;
+    }
+
+    if (isInSwipeArea) {
+      _recognizer.addPointerPanZoom(event);
+    }
+  }
+
   void _handleDragStart(DragStartDetails details) {
     _gestureStartX = details.localPosition.dx;
   }
@@ -217,6 +237,7 @@ class __BackGestureWrapperState extends State<_BackGestureWrapper> {
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: _handlePointerDown,
+      onPointerPanZoomStart: _handlePointerPanZoomStart,
       behavior: HitTestBehavior.translucent,
       child: widget.child,
     );
